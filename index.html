@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>ZEINA ROASTERY</title>
   <link rel="icon" href="https://icons.iconarchive.com/icons/paomedia/small-n-flat/256/sign-check-icon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -83,7 +83,7 @@
     </button>
   </div>
   <div class="container mt-5">
-    <h2 class="text-center mb-4">About Us</h2>
+    <h2 class="text-center mb-4" id="1">About Us</h2>
     <p><i>Welcome to Zeina – A Legacy of Flavor and Family
 
         Nestled in the heart of Kfarsaroun, Zeina is not just a roastery — it’s a living legacy. Born from the hands of
@@ -100,7 +100,7 @@
 
 
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Our Products</h2>
+    <h2 class="text-center mb-4" id="2">Our Products</h2>
     <div class="row">
       <!-- First Product -->
       <div class="col-md-4">
@@ -136,14 +136,15 @@
             <h5 class="card-title">Brazilian Nuts</h5>
             <p class="card-text">Earthy flavor, big benefits. Our Brazilian nuts are a delicious and nutritious choice
               for any time of day.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-      </div>
-    </div>  
 
 
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Contact Us</h2>
+    <h2 class="text-center mb-4" id="3">Contact Us</h2>
     <form>
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
@@ -157,7 +158,7 @@
         <label for="message" class="form-label">Message</label>
         <textarea class="form-control" id="message" rows="3" required></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Send Message</button>
+      <button type="submit" class="btn btn-primary" onclick="">Send Message</button>
     </form>
   </div>
   <footer class="bg-dark text-white text-center py-3">
@@ -167,8 +168,33 @@
       <a href="#" class="text-white">Instagram</a> |
       <a href="#" class="text-white">Twitter</a>
     </p>
+  </footer>
 
-
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Zeina Roastery</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#1">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#2">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#3">Contact Us</a>
+          </li> 
+        </ul>
+      </div>
+    </div>
+  </nav>
 </body>
 
 </html>
