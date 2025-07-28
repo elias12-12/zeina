@@ -13,27 +13,43 @@
 </head>
 
 <body>
-  <!-- <div class="card" style="width: 28rem;">
-    <img
-      src="https://media.istockphoto.com/id/1028956332/photo/mixed-nuts.jpg?s=1024x1024&w=is&k=20&c=67ux5wHmlOrHm-Pmj0ShY2cWVOwh5oYmtMNZ1tOqJ-8="
-      class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title" style="color: rgb(17, 23, 23);text-align: center;"><i>ZEINA ROASTERY</i></h5>
-      <p class="card-text">Welcome to Zeina – A Legacy of Flavor and Family
-
-        Nestled in the heart of Kfarsaroun, Zeina is not just a roastery — it’s a living legacy. Born from the hands of
-        a passionate grandfather with a love for rich, authentic flavor, Zeina has grown into a beloved family business,
-        now run by his children and soon, by their children too.
-
-        At Zeina, you’ll find only the finest roasted nuts, from luxurious premium blends to the freshest everyday
-        favorites — each batch slow-roasted to perfection. And for the coffee lovers? Our signature top-quality coffee
-        is bold, smooth, and unforgettable — crafted to awaken your senses with every sip.
-
-        More than a shop, Zeina is a tradition passed down through generations, where quality, warmth, and community
-        come together in every bite and every cup.</p>
-      <a href="#" class="btn btn-primary">Zeina roastery</a>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
     </div>
-  </div> -->
+  </div>
+</nav>
+
 
   <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-indicators">
@@ -83,8 +99,8 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
-  </div><div class="container mt-5">
-  <h2 class="text-center mb-4">Navigation</h2>
+  </div>
+  
      <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Zeina Roastery</a>
@@ -170,6 +186,7 @@
       </div>
     </div>
   </div>
+
   
   <div class="container mt-5">
     <h2 class="text-center mb-4" id="3">Contact Us</h2>
@@ -210,6 +227,35 @@
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
     crossorigin="anonymous"></script> 
 </div>
+</div>
+
+<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+  Link with href
+</a>
+<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+  Button with data-bs-target
+</button>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>
+      Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+    </div>
+    <div class="dropdown mt-3">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 </body>
