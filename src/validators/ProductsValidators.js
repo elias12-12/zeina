@@ -1,0 +1,12 @@
+import { body, param } from 'express-validator';
+
+export const idParam = param('product_id')
+    .isInt({ min: 1 }).withMessage('Product ID must be a positive integer');
+
+export const upsertProduct = [
+    body('product_name').notEmpty().withMessage('product_name is required'),
+    body('description').notEmpty().withMessage('description is required'),
+    body('unit_price').isFloat({ gt: 0 }).withMessage('unit_price must be greater than 0'),
+    body('product_type').notEmpty().withMessage('product_type is required'),
+    body('status').isIn(['available', 'not available']).withMessage('status must be available or not available')
+];

@@ -1,0 +1,181 @@
+import { SaleItemsDTO } from '../domain/dto/SaleItemsDTO.js';
+import { pool } from "../config/db.js";
+
+export class SaleItemsServices {
+    constructor(saleItemsRepository) {
+        this.saleItemsRepository = saleItemsRepository;
+    }
+
+    async getAllSaleItems() {
+        try {
+            const items = await this.saleItemsRepository.findAll();
+            return items.map(item => SaleItemsDTO.fromEntity(item));
+        } catch (error) {
+            throw new Error(`Failed to list sale items: ${error.message}`);
+        }
+    }
+
+    async getSaleItemById(sale_item_id) {
+        try {
+            if (!sale_item_id || isNaN(sale_item_id)) {
+                throw new Error('Invalid sale item ID');
+            }
+            const item = await this.saleItemsRepository.findById(sale_item_id);
+            return item ? SaleItemsDTO.fromEntity(item) : null;
+        } catch (error) {
+            throw new Error(`Failed to get sale item: ${error.message}`);
+        }
+    }
+
+    async getSaleItemsBySaleId(sale_id) {
+        try {
+            if (!sale_id || isNaN(sale_id)) {
+                throw new Error('Invalid sale ID');
+            }
+            const items = await this.saleItemsRepository.findBySaleId(sale_id);
+            return items.map(item => SaleItemsDTO.fromEntity(item));
+        } catch (error) {
+            throw new Error(`Failed to get sale items by sale: ${error.message}`);
+        }
+    }
+
+    /*async createSaleItem(sale_id, product_id, quantity, price_at_sale) {
+        try {
+            if (!sale_id || isNaN(sale_id)) {
+                throw new Error('Invalid sale ID');
+            }
+            if (!product_id || isNaN(product_id)) {
+                throw new Error('Invalid product ID');
+            }
+            if (!quantity || isNaN(quantity) || quantity <= 0) {
+                throw new Error('Quantity must be a positive number');
+            }
+            if (price_at_sale == null || isNaN(price_at_sale) || price_at_sale < 0) {
+                throw new Error('Price at sale must be a non-negative number');
+            }
+
+            const item = await this.saleItemsRepository.create({ sale_id, product_id, quantity, price_at_sale });
+            return SaleItemsDTO.fromEntity(item);
+        } catch (error) {
+            throw new Error(`Failed to create sale item: ${error.message}`);
+        }
+    }*/
+     /**
+   * Create a sale item and atomically:
+   * - ensure sale exists
+   * - ensure product exists (via inventory join)
+   * - check and decrement inventory
+   * - insert sale_item
+   * - recompute and update sale.total_amount (sum of sale_items)
+   */
+  async createSaleItem(sale_id, product_id, quantity, price_at_sale) {
+    // validation (keep your existing checks)
+    if (!sale_id || isNaN(sale_id)) throw new Error('Invalid sale ID');
+    if (!product_id || isNaN(product_id)) throw new Error('Invalid product ID');
+    if (!quantity || isNaN(quantity) || quantity <= 0) throw new Error('Quantity must be positive');
+    if (price_at_sale == null || isNaN(price_at_sale) || price_at_sale < 0) throw new Error('Invalid price');
+
+    const client = await pool.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      // 1) Check sale exists and lock it
+      const saleRes = await client.query(
+        `SELECT sale_id FROM sales WHERE sale_id = $1 FOR UPDATE`,
+        [sale_id]
+      );
+      if (saleRes.rowCount === 0) {
+        throw new Error(`Sale with id ${sale_id} not found`);
+      }
+
+      // 2) Lock inventory row for the product (SELECT FOR UPDATE)
+      // If you don't have an inventory row, treat quantity_in_stock as 0
+      const invRes = await client.query(
+        `SELECT inventory_id, quantity_in_stock FROM inventory WHERE product_id = $1 FOR UPDATE`,
+        [product_id]
+      );
+
+      if (invRes.rowCount === 0) {
+        throw new Error(`Inventory record for product ${product_id} not found`);
+      }
+
+      const quantity_in_stock = parseInt(invRes.rows[0].quantity_in_stock,10);
+      if (quantity_in_stock < quantity) {
+        throw new Error(`Insufficient stock for product ${product_id}. Available: ${quantity_in_stock}`);
+      }
+
+      // 3) Insert the sale_item
+      const insertItemText = `
+        INSERT INTO sale_items (sale_id, product_id, quantity, price_at_sale)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;
+      `;
+      const insertItemValues = [sale_id, product_id, quantity, price_at_sale];
+      const insertedItemRes = await client.query(insertItemText, insertItemValues);
+      const insertedItem = insertedItemRes.rows[0];
+
+      // 4) Decrement inventory
+      await client.query(
+        `UPDATE inventory SET quantity_in_stock = quantity_in_stock - $1, last_updated = CURRENT_TIMESTAMP
+         WHERE product_id = $2`,
+        [quantity, product_id]
+      );
+
+      // 5) Recompute sale total from sale_items (recommended over incremental update)
+      //    This avoids accumulation rounding issues, and is atomic inside this transaction
+      const totalRes = await client.query(
+        `SELECT COALESCE(SUM(quantity * price_at_sale), 0)::numeric(12,2) AS new_total
+         FROM sale_items
+         WHERE sale_id = $1`,
+        [sale_id]
+      );
+      const newTotal = totalRes.rows[0].new_total;
+
+      // 6) Update sale total
+      await client.query(
+        `UPDATE sales SET total_amount = $1 WHERE sale_id = $2`,
+        [newTotal, sale_id]
+      );
+
+      await client.query('COMMIT');
+
+      // Return DTO (you may map fields as your DTO expects)
+      return SaleItemsDTO.fromEntity(insertedItem);
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw new Error(`Failed to create sale item transactionally: ${err.message}`);
+    } finally {
+      client.release();
+    }
+  }
+
+
+
+    async updateSaleItem(sale_item_id, updates) {
+        try {
+            if (!sale_item_id || isNaN(sale_item_id)) {
+                throw new Error('Invalid sale item ID');
+            }
+            const item = await this.saleItemsRepository.update(sale_item_id, updates);
+            return item ? SaleItemsDTO.fromEntity(item) : null;
+        } catch (error) {
+            throw new Error(`Failed to update sale item: ${error.message}`);
+        }
+    }
+
+    async deleteSaleItem(sale_item_id) {
+        try {
+            if (!sale_item_id || isNaN(sale_item_id)) {
+                throw new Error('Invalid sale item ID');
+            }
+            return await this.saleItemsRepository.delete(sale_item_id);
+        } catch (error) {
+            throw new Error(`Failed to delete sale item: ${error.message}`);
+        }
+    }
+
+    async getSaleItemByIdWithDetails(sale_item_id) {
+    return await this.saleItemsRepository.findByIdWithDetails(sale_item_id);
+}
+}
