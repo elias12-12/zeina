@@ -12,6 +12,7 @@ const controller = new InventoryControllers(service);
 export const InventoryRoutes = Router();
 
 InventoryRoutes.get('/', controller.list);
+InventoryRoutes.get('/low-stock', controller.getLowStock);
 InventoryRoutes.get('/:product_id', productIdParam, controller.getByProduct);
 InventoryRoutes.post('/', createInventory, controller.create);
 InventoryRoutes.put('/:product_id', [productIdParam, ...updateInventory], controller.update);

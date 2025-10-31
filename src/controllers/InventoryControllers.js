@@ -75,4 +75,22 @@ export class InventoryControllers {
             next(err);
         }
     }
+    getLowStock = async (req, res, next) => {
+        try {
+            const threshold = req.query.threshold ? parseInt(req.query.threshold) : 5;
+            
+            if (isNaN(threshold) || threshold < 0) {
+                return res.status(400).json({ message: "Threshold must be a non-negative number" });
+            }
+
+            const lowStockItems = await this.inventoryService.getLowStockProducts(threshold);
+            res.json({
+                threshold: threshold,
+                count: lowStockItems.length,
+                items: lowStockItems
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
 }
