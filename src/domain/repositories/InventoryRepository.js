@@ -34,6 +34,24 @@ export class InventoryRepository {
         const { rows } = await pool.query(sql, [quantity_in_stock, product_id]);
         return rows[0] ? new Inventory(rows[0]) : null;
     }
+async findAllWithDetails() {
+    const sql = `
+        SELECT 
+            i.inventory_id,
+            i.product_id,
+            i.quantity_in_stock,
+            TO_CHAR(i.last_updated, 'DD/MM/YYYY') as last_updated,
+            p.product_name,
+            p.unit_price,
+            p.product_type,
+            p.status
+        FROM inventory i
+        INNER JOIN products p ON i.product_id = p.product_id
+        ORDER BY i.inventory_id DESC;
+    `;
+    const { rows } = await pool.query(sql);
+    return rows;
+}
 async findByLowStock(threshold = 5) {
     const sql = `
         SELECT 

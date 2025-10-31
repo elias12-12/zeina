@@ -41,6 +41,21 @@ export class InventoryServices {
             throw new Error(`Failed to get inventory by product: ${error.message}`);
         }
     }
+    async getAllWithDetails(){
+        try {
+            const inventory=await this.inventoryRepository.findAllWithDetails();
+            return inventory.map(r=>({inventory_id:r.inventory_id,
+                product_id:r.product_id,
+                quantity_in_stock:r.quantity_in_stock,
+                last_updated:r.last_updated,
+                product_name:r.product_name
+            }));
+            
+        } catch (error) {
+            throw new Error(`Failed to list inventory: ${error.message}`);
+        }
+    }
+
     async getLowStockProducts(threshold = 5) {
     try {
         if (isNaN(threshold) || threshold < 0) {

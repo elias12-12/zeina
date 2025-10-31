@@ -75,6 +75,17 @@ export class InventoryControllers {
             next(err);
         }
     }
+    getAllWithDetails = async (req, res, next) => {
+    try {
+        const inventory = await this.inventoryService.getAllWithDetails();
+        if (!inventory || inventory.length === 0)
+            return res.status(404).json({ message: "No inventory records found" });
+        
+        res.json(inventory);
+    } catch (err) {
+        next(err);
+    }
+};
     getLowStock = async (req, res, next) => {
         try {
             const threshold = req.query.threshold ? parseInt(req.query.threshold) : 5;
