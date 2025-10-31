@@ -68,7 +68,7 @@ export class SaleItemsServices {
    * - insert sale_item
    * - recompute and update sale.total_amount (sum of sale_items)
    */
-  async createSaleItem(sale_id, product_id, quantity, price_at_sale) {
+async createSaleItem(sale_id, product_id, quantity, price_at_sale) {
     // validation (keep your existing checks)
     if (!sale_id || isNaN(sale_id)) throw new Error('Invalid sale ID');
     if (!product_id || isNaN(product_id)) throw new Error('Invalid product ID');
@@ -82,12 +82,13 @@ export class SaleItemsServices {
 
       // 1) Check sale exists and lock it
       const saleRes = await client.query(
-        `SELECT sale_id FROM sales WHERE sale_id = $1 FOR UPDATE`,
+        `SELECT sale_id, discount_percentage FROM sales WHERE sale_id = $1 FOR UPDATE`,
         [sale_id]
       );
       if (saleRes.rowCount === 0) {
         throw new Error(`Sale with id ${sale_id} not found`);
       }
+      const currentDiscount = parseFloat(saleRes.rows[0].discount_percentage) || 0;
 
       // 2) Lock inventory row for the product (SELECT FOR UPDATE)
       // If you don't have an inventory row, treat quantity_in_stock as 0
@@ -122,20 +123,22 @@ export class SaleItemsServices {
         [quantity, product_id]
       );
 
-      // 5) Recompute sale total from sale_items (recommended over incremental update)
-      //    This avoids accumulation rounding issues, and is atomic inside this transaction
+      // 5) Recompute sale subtotal from sale_items
       const totalRes = await client.query(
-        `SELECT COALESCE(SUM(quantity * price_at_sale), 0)::numeric(12,2) AS new_total
+        `SELECT COALESCE(SUM(quantity * price_at_sale), 0)::numeric(12,2) AS new_subtotal
          FROM sale_items
          WHERE sale_id = $1`,
         [sale_id]
       );
-      const newTotal = totalRes.rows[0].new_total;
+      const newSubtotal = totalRes.rows[0].new_subtotal;
 
-      // 6) Update sale total
+      // 6) Calculate discount and update sale
+      const discountAmount = (newSubtotal * currentDiscount) / 100;
+      const totalAmount = newSubtotal - discountAmount;
+
       await client.query(
-        `UPDATE sales SET total_amount = $1 WHERE sale_id = $2`,
-        [newTotal, sale_id]
+        `UPDATE sales SET subtotal = $1, discount_amount = $2, total_amount = $3 WHERE sale_id = $4`,
+        [newSubtotal, discountAmount, totalAmount, sale_id]
       );
 
       await client.query('COMMIT');

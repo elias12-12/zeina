@@ -65,6 +65,30 @@ export class SalesServices {
         }
     }
 
+       async applyDiscount(sale_id, discount_percentage) {
+        try {
+            if (!sale_id || isNaN(sale_id)) {
+                throw new Error('Invalid sale ID');
+            }
+            if (discount_percentage == null || isNaN(discount_percentage)) {
+                throw new Error('Invalid discount percentage');
+            }
+            if (discount_percentage < 0 || discount_percentage > 100) {
+                throw new Error('Discount percentage must be between 0 and 100');
+            }
+
+            const currentSale = await this.salesRepository.findById(sale_id);
+            if (!currentSale) {
+                throw new Error('Sale not found');
+            }
+
+            const sale = await this.salesRepository.updateWithDiscount(sale_id, currentSale.subtotal, discount_percentage);
+            return sale ? SalesDTO.fromEntity(sale) : null;
+        } catch (error) {
+            throw new Error(`Failed to apply discount: ${error.message}`);
+        }
+    }
+
     async deleteSale(sale_id) {
         try {
             if (!sale_id || isNaN(sale_id)) {

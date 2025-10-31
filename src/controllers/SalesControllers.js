@@ -75,6 +75,18 @@ export class SalesControllers {
             next(err);
         }
     }
+    // Apply discount to sale
+    applyDiscount = async (req, res, next) => {
+        try {
+            this._validate(req);
+            const updatedSale = await this.salesService.applyDiscount(req.params.sale_id, req.body.discount_percentage);
+            if (!updatedSale)
+                return res.status(404).json({ message: "Sale not found" });
+            res.json(updatedSale);
+        } catch (err) {
+            next(err);
+        }
+    }
 
     // Delete a sale
     delete = async (req, res, next) => {

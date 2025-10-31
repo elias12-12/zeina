@@ -13,3 +13,7 @@ export const upsertSales = [
     body('total_amount').optional().isFloat({ gt: 0 }).withMessage('total_amount must be a positive number if provided'),
     body('sale_date').optional().isISO8601().withMessage('sale_date must be a valid date (ISO 8601 format)')
 ];
+
+export const applyDiscountValidator = [
+    body('discount_percentage').isFloat({ min: 0, max: 100 }).withMessage('Discount percentage must be between 0 and 100')
+];
