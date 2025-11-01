@@ -25,6 +25,22 @@ export class SalesServices {
             throw new Error(`Failed to get sale: ${error.message}`);
         }
     }
+    async getSaleBetweenDates(startDate,endDate){
+        try {
+            if(!startDate || !endDate)
+                throw new Error(`Invalid sale date`);
+            const startDate = new Date(startDate);
+            const endDate = new Date(endDate);
+            if(isNaN(startDate.getDate()) || isNaN(endDate.getDate())){
+                throw new Error(`Invalid date format`)
+            }
+            const sale = await this.salesRepository.getSaleBetweenDates(startDate,endDate);
+            return sale.map(r=> SalesDTO.fromEntity(r));
+            
+        } catch (error) {
+            throw new Error(`Failed to get sale: ${error.message}`)
+        }
+    }
 
     async getSalesByCustomer(user_id) {
         try {
