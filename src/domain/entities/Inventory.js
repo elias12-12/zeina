@@ -4,7 +4,7 @@
  * - inventory_id: number | null
  * - product_id: number | null
  * - quantity_in_stock: number
- * - last_updated: Date | string (ISO)
+ * - last_updated: Date | string 
  */
 export class Inventory{
     constructor({inventory_id = null, product_id = null, quantity_in_stock = 0, last_updated = new Date() }){

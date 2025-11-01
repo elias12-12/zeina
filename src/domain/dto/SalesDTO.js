@@ -13,9 +13,7 @@ export class SalesDTO {
     constructor({sale_id = null, user_id = null, sale_date = new Date(), subtotal, discount_percentage, discount_amount, total_amount = 0}) {
         this.sale_id = sale_id;
         this.user_id = user_id;
-        // normalize sale_date to Date if a string was provided
-        this.sale_date = (sale_date instanceof Date) ? sale_date : new Date(sale_date);
-        // normalize numeric fields (accept number or numeric string)
+        this.sale_date = sale_date;
         this.subtotal = parseFloat(subtotal);
         this.discount_percentage = parseFloat(discount_percentage) || 0;
         this.discount_amount = parseFloat(discount_amount) || 0;

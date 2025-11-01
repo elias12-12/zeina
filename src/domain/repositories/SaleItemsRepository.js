@@ -66,7 +66,7 @@ export class SaleItemsRepository {
             si.quantity,
             si.price_at_sale,
             s.user_id,
-            s.sale_date,
+            TO_CHAR(s.sale_date, 'DD/MM/YYYY') as sale_date,
             u.first_name,
             u.last_name,
             p.product_name

@@ -40,10 +40,9 @@ async getSalesBetweenDates(startDate, endDate) {
             throw new Error('Start date and end date are required');
         }
 
-        // Validate date format DD/MM/YYYY or DD-MM-YYYY
-        const dateRegex = /^\d{2}[-\/]\d{2}[-\/]\d{4}$/;
+        const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
         if (!dateRegex.test(startDate) || !dateRegex.test(endDate)) {
-            throw new Error('Invalid date format. Use DD/MM/YYYY or DD-MM-YYYY');
+            throw new Error('Invalid date format. Use DD/MM/YYYY');
         }
 
         const sales = await this.salesRepository.findBetweenDates(startDate, endDate);
