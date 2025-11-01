@@ -1,4 +1,4 @@
-import { param, body } from 'express-validator';
+import { param, body ,query} from 'express-validator';
 
 export const idParam = [
     param('sale_id').isInt({ gt: 0 }).withMessage('sale_id must be a positive integer')
@@ -16,4 +16,17 @@ export const upsertSales = [
 
 export const applyDiscountValidator = [
     body('discount_percentage').isFloat({ min: 0, max: 100 }).withMessage('Discount percentage must be between 0 and 100')
+];
+export const getSaleBetweenDates = [
+    query('startDate')
+        .notEmpty()
+        .withMessage('startDate is required')
+        .matches(/^\d{2}\/\d{2}\/\d{4}$/)
+        .withMessage('startDate must be in DD/MM/YYYY format (e.g., 01/10/2025)'),
+    
+    query('endDate')
+        .notEmpty()
+        .withMessage('endDate is required')
+        .matches(/^\d{2}\/\d{2}\/\d{4}$/)
+        .withMessage('endDate must be in DD/MM/YYYY format (e.g., 31/10/2025)')
 ];

@@ -87,6 +87,24 @@ export class SalesControllers {
             next(err);
         }
     }
+    getSalesBetweenDates = async (req, res, next) => {
+    try {
+        this._validate(req);
+        
+        const { startDate, endDate } = req.query;
+        
+        const sales = await this.salesService.getSalesBetweenDates(startDate, endDate);
+        
+        res.json({
+            startDate: startDate,
+            endDate: endDate,
+            count: sales.length,
+            sales: sales
+        });
+    } catch (err) {
+        next(err);
+    }
+}
 
     // Delete a sale
     delete = async (req, res, next) => {

@@ -49,6 +49,14 @@ export class SalesRepository {
         const { rows } = await pool.query(sql, [sale_id]);
         return rows[0] ? new Sales(rows[0]) : null;
     }
+    async findBetweenDates(first,second){
+        const sql=`SELECT * FROM SALES 
+        WHERE sale_date BETWEEN TO_DATE($1, 'DD/MM/YYYY') AND TO_DATE($2, 'DD/MM/YYYY')
+        ORDER BY sale_date;
+        `
+        const {rows}=await pool.query(sql,[first,second]);
+        return rows.map(r=>new Sales(r));
+    }
 
       async findByCustomer(user_id) {
         const sql = `SELECT sale_id, user_id, subtotal, discount_percentage, discount_amount, total_amount, TO_CHAR(sale_date, 'DD/MM/YYYY') as sale_date FROM sales WHERE user_id = $1 ORDER BY sale_id DESC;`;

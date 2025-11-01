@@ -90,8 +90,8 @@ async createSaleItem(sale_id, product_id, quantity, price_at_sale) {
       }
       const currentDiscount = parseFloat(saleRes.rows[0].discount_percentage) || 0;
 
-      // 2) Lock inventory row for the product (SELECT FOR UPDATE)
-      // If you don't have an inventory row, treat quantity_in_stock as 0
+      // 2) Lock inventory row for the product 
+      // If no inventory row, treat quantity_in_stock as 0
       const invRes = await client.query(
         `SELECT inventory_id, quantity_in_stock FROM inventory WHERE product_id = $1 FOR UPDATE`,
         [product_id]
@@ -143,7 +143,7 @@ async createSaleItem(sale_id, product_id, quantity, price_at_sale) {
 
       await client.query('COMMIT');
 
-      // Return DTO (you may map fields as your DTO expects)
+      // Return DTO
       return SaleItemsDTO.fromEntity(insertedItem);
     } catch (err) {
       await client.query('ROLLBACK');
