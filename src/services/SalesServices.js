@@ -25,22 +25,25 @@ export class SalesServices {
             throw new Error(`Failed to get sale: ${error.message}`);
         }
     }
-    async getSaleBetweenDates(startDate,endDate){
-        try {
-            if(!startDate || !endDate)
-                throw new Error(`Invalid sale date`);
-            const startDate = new Date(startDate);
-            const endDate = new Date(endDate);
-            if(isNaN(startDate.getDate()) || isNaN(endDate.getDate())){
-                throw new Error(`Invalid date format`)
-            }
-            const sale = await this.salesRepository.getSaleBetweenDates(startDate,endDate);
-            return sale.map(r=> SalesDTO.fromEntity(r));
-            
-        } catch (error) {
-            throw new Error(`Failed to get sale: ${error.message}`)
+async getSalesBetweenDates(startDate, endDate) {
+    try {
+        if (!startDate || !endDate) {
+            throw new Error('Start date and end date are required');
         }
+
+        // Validate date format DD/MM/YYYY or DD-MM-YYYY
+        const dateRegex = /^\d{2}[-\/]\d{2}[-\/]\d{4}$/;
+        if (!dateRegex.test(startDate) || !dateRegex.test(endDate)) {
+            throw new Error('Invalid date format. Use DD/MM/YYYY or DD-MM-YYYY');
+        }
+
+        const sales = await this.salesRepository.findBetweenDates(startDate, endDate);
+        return sales.map(sale => SalesDTO.fromEntity(sale));
+        
+    } catch (error) {
+        throw new Error(`Failed to get sales: ${error.message}`);
     }
+}
 
     async getSalesByCustomer(user_id) {
         try {
