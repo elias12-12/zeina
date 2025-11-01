@@ -1,3 +1,10 @@
+/**
+ * InventoryValidators - express-validator rules for inventory endpoints
+ * Exports:
+ * - productIdParam: param validator for product_id
+ * - createInventory: body validators for creating inventory records
+ * - updateInventory: body validators for updating inventory
+ */
 import { body, param } from 'express-validator';
 
 export const productIdParam = [

@@ -1,4 +1,13 @@
-import { param, body ,query} from 'express-validator';
+/**
+ * SalesValidators - express-validator rules for sales endpoints
+ * Exports:
+ * - idParam: param validator for sale_id
+ * - userIdParam: param validator for user_id
+ * - upsertSales: body validators for creating/updating sales
+ * - applyDiscountValidator: body validator for discount application
+ * - getSaleBetweenDates: query validators for date range (DD/MM/YYYY)
+ */
+import { param, body, query } from 'express-validator';
 
 export const idParam = [
     param('sale_id').isInt({ gt: 0 }).withMessage('sale_id must be a positive integer')

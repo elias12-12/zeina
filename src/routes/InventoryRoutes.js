@@ -1,3 +1,7 @@
+/**
+ * InventoryRoutes - HTTP routes for inventory management
+ * Exports: InventoryRoutes (Express Router)
+ */
 import { Router } from 'express';
 import { InventoryRepository } from '../domain/repositories/InventoryRepository.js';
 import { InventoryServices } from '../services/InventoryServices.js';

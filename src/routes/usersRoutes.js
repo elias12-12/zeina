@@ -1,4 +1,9 @@
-import {Router} from 'express'
+/**
+ * UsersRoutes - defines HTTP routes for user-related endpoints
+ * Exports: UsersRoutes (Express Router)
+ * Dependencies are instantiated via simple DI in this module.
+ */
+import { Router } from 'express'
 import { UsersRepository } from '../domain/repositories/UsersRepository.js';
 import { UsersServices } from '../services/UsersServices.js';
 import { UsersController } from '../controllers/UsersController.js';

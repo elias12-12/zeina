@@ -1,4 +1,10 @@
-import {Pool} from 'pg';
+/**
+ * Database configuration
+ * - Exports:
+ *   - pool: PG Pool instance configured from environment variables
+ *   - healthCheck(): simple DB connectivity check (returns boolean)
+ */
+import { Pool } from 'pg';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -10,7 +16,7 @@ export const pool = new Pool({
     password: process.env.PGPASSWORD
 });
 
-export const healthCheck = async() =>{
-    const {rows} = await pool.query('SELECT 1 as ok');
+export const healthCheck = async () => {
+    const { rows } = await pool.query('SELECT 1 as ok');
     return rows[0].ok === 1;
 }

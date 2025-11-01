@@ -1,3 +1,9 @@
+/**
+ * ProductsValidators - express-validator rules for product endpoints
+ * Exports:
+ * - idParam: param validator for product_id
+ * - upsertProduct: body validators for creating/updating products
+ */
 import { body, param } from 'express-validator';
 
 export const idParam = param('product_id')

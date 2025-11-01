@@ -1,9 +1,19 @@
 import {validationResult} from 'express-validator'
+
+/**
+ * UsersController — minimal documentation
+ * Common request pieces:
+ * - req.params.user_id: number|string
+ * - req.body: object (user fields for create/update)
+ * - login expects { email: string, password: string } in req.body
+ */
 export class UsersController{
     constructor(userServices){
         this.userServices = userServices;
     }
 
+    // Validate request using express-validator. If invalid, respond 400 and
+    // return the response object; otherwise return null so callers continue.
     _validate(req, res){
         const errors = validationResult(req);
         if(!errors.isEmpty()){
@@ -12,6 +22,7 @@ export class UsersController{
         return null;
     }
 
+    // GET /users — list all users
     list = async (req, res, next) =>{
         try{
             res.json(await this.userServices.listUsers());
@@ -20,6 +31,7 @@ export class UsersController{
         }
     }
 
+    // GET /users/:user_id — get a single user
     get = async (req, res, next) => {
         try{
             if(this._validate(req, res)){
@@ -35,6 +47,7 @@ export class UsersController{
         }
     }
 
+    // POST /users — create a user; expects user object in req.body
     create = async (req, res, next) =>{
         try{
             if(this._validate(req, res)){
@@ -47,6 +60,7 @@ export class UsersController{
         }
     }
 
+    // PUT /users/:user_id — update a user; expects user fields in req.body
     update = async (req, res, next) =>{
         try{
             if(this._validate(req, res)){
@@ -63,6 +77,7 @@ export class UsersController{
         }
     }
 
+    // DELETE /users/:user_id — delete a user
     delete = async (req, res, next) =>{
         try{
             if(this._validate(req, res)){
@@ -80,6 +95,8 @@ export class UsersController{
             next(e);
         }
     }
+
+    // POST /users/login — login with { email, password }
     login = async (req, res) => {
         try {
             const { email, password } = req.body;

@@ -1,11 +1,21 @@
 import { validationResult } from 'express-validator';
 
+/**
+ * SalesControllers — small/simple documentation
+ * Methods expose basic CRUD and query endpoints for sales.
+ * Common request pieces:
+ * - req.params.sale_id: number|string (sale identifier)
+ * - req.params.user_id: number|string (user identifier)
+ * - req.query.startDate/endDate: string (ISO date)
+ * - req.body.user_id: number|string
+ * - req.body.total_amount, req.body.discount_percentage: number|string
+ */
 export class SalesControllers {
     constructor(salesService) {
         this.salesService = salesService;
     }
 
-    // Validate input and throw error if invalid
+    // Validate input using express-validator; throws ValidationError with `details` if invalid
     _validate(req) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -16,7 +26,7 @@ export class SalesControllers {
         }
     }
 
-    // List all sales
+    // List all sales — responds with Array<Object>
     list = async (req, res, next) => {
         try {
             const sales = await this.salesService.getAllSales();
@@ -26,7 +36,7 @@ export class SalesControllers {
         }
     }
 
-    // Get a single sale by ID
+    // Get a single sale by ID — req.params.sale_id
     get = async (req, res, next) => {
         try {
             this._validate(req);
@@ -39,7 +49,7 @@ export class SalesControllers {
         }
     }
 
-    // Get all sales by a specific customer
+    // Get all sales by a specific customer — req.params.user_id
     getByCustomer = async (req, res, next) => {
         try {
             this._validate(req);
@@ -52,7 +62,7 @@ export class SalesControllers {
         }
     }
 
-    // Create a new sale
+    // Create a new sale — expects req.body.user_id
     create = async (req, res, next) => {
         try {
             this._validate(req);
@@ -63,7 +73,7 @@ export class SalesControllers {
         }
     }
 
-    // Update sale total amount
+    // Update sale total amount — expects req.body.total_amount
     update = async (req, res, next) => {
         try {
             this._validate(req);
@@ -75,7 +85,8 @@ export class SalesControllers {
             next(err);
         }
     }
-    // Apply discount to sale
+
+    // Apply discount to sale — expects req.body.discount_percentage
     applyDiscount = async (req, res, next) => {
         try {
             this._validate(req);
@@ -87,26 +98,25 @@ export class SalesControllers {
             next(err);
         }
     }
-    getSalesBetweenDates = async (req, res, next) => {
-    try {
-        this._validate(req);
-        
-        const { startDate, endDate } = req.query;
-        
-        const sales = await this.salesService.getSalesBetweenDates(startDate, endDate);
-        
-        res.json({
-            startDate: startDate,
-            endDate: endDate,
-            count: sales.length,
-            sales: sales
-        });
-    } catch (err) {
-        next(err);
-    }
-}
 
-    // Delete a sale
+    // Get sales between dates — expects query strings startDate, endDate (ISO strings)
+    getSalesBetweenDates = async (req, res, next) => {
+        try {
+            this._validate(req);
+            const { startDate, endDate } = req.query;
+            const sales = await this.salesService.getSalesBetweenDates(startDate, endDate);
+            res.json({
+                startDate: startDate,
+                endDate: endDate,
+                count: sales.length,
+                sales: sales
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    // Delete a sale — req.params.sale_id
     delete = async (req, res, next) => {
         try {
             this._validate(req);

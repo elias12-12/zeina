@@ -1,10 +1,42 @@
 import { validationResult } from 'express-validator';
 
+/**
+ * SaleItemsControllers
+ *
+ * Controller class that exposes HTTP handlers for sale item routes. Each
+ * handler uses the provided `saleItemsService` to perform the business logic
+ * and follows the Express handler signature (req, res, next).
+ *
+ * Expected saleItemsService methods:
+ * - getAllSaleItems()
+ * - getSaleItemById(id)
+ * - getSaleItemsBySaleId(saleId)
+ * - createSaleItem(sale_id, product_id, quantity, price_at_sale)
+ * - updateSaleItem(id, payload)
+ * - deleteSaleItem(id)
+ * - getSaleItemByIdWithDetails(id)
+ *
+ * Validation: this controller uses express-validator; when validation fails the
+ * `_validate` helper throws an Error with `name === "ValidationError"` and
+ * a `details` array describing the issues.
+ */
 export class SaleItemsControllers {
+    /**
+     * @param {Object} saleItemsService - service implementing sale items operations
+     */
     constructor(saleItemsService) {
         this.saleItemsService = saleItemsService;
     }
 
+    /**
+     * Validate the request using express-validator rules attached to the route.
+     * If validation errors exist, throws an Error with name "ValidationError"
+     * and a `details` property containing the array of issues.
+     *
+     * @param {import('express').Request} req
+     * @throws {Error} ValidationError
+     * @private
+     */
     _validate(req) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -15,6 +47,10 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * GET /sale-items
+     * Return all sale items.
+     */
     list = async (req, res, next) => {
         try {
             const items = await this.saleItemsService.getAllSaleItems();
@@ -24,6 +60,10 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * GET /sale-items/:sale_item_id
+     * Retrieve a sale item by id. Returns 404 when not found.
+     */
     get = async (req, res, next) => {
         try {
             this._validate(req);
@@ -36,6 +76,11 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * GET /sale-items/sale/:sale_id
+     * Retrieve all sale items that belong to a specific sale.
+     * Returns 404 if none are found.
+     */
     getBySaleId = async (req, res, next) => {
         try {
             this._validate(req);
@@ -48,6 +93,11 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * POST /sale-items
+     * Create a new sale item. Expects sale_id, product_id, quantity, price_at_sale
+     * in the request body.
+     */
     create = async (req, res, next) => {
         try {
             this._validate(req);
@@ -63,6 +113,10 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * PUT /sale-items/:sale_item_id
+     * Update an existing sale item. Returns 404 if not found.
+     */
     update = async (req, res, next) => {
         try {
             this._validate(req);
@@ -75,6 +129,10 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * DELETE /sale-items/:sale_item_id
+     * Delete a sale item. Returns 204 on success, 404 if not found.
+     */
     delete = async (req, res, next) => {
         try {
             this._validate(req);
@@ -87,15 +145,20 @@ export class SaleItemsControllers {
         }
     }
 
+    /**
+     * GET /sale-items/:sale_item_id/details
+     * Retrieve a sale item including related details (e.g., product or sale info).
+     * Returns 404 if not found.
+     */
     getWithDetails = async (req, res, next) => {
-    try {
-        this._validate(req);
-        const item = await this.saleItemsService.getSaleItemByIdWithDetails(req.params.sale_item_id);
-        if (!item)
-            return res.status(404).json({ message: "Sale item not found" });
-        res.json(item);
-    } catch (err) {
-        next(err);
+        try {
+            this._validate(req);
+            const item = await this.saleItemsService.getSaleItemByIdWithDetails(req.params.sale_item_id);
+            if (!item)
+                return res.status(404).json({ message: "Sale item not found" });
+            res.json(item);
+        } catch (err) {
+            next(err);
+        }
     }
-}
 }

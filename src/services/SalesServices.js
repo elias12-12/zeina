@@ -1,5 +1,14 @@
 import { SalesDTO } from '../domain/dto/SalesDTO.js';
 
+/**
+ * SalesServices - Business logic for sales operations
+ * Methods:
+ * - getAllSales(): Gets all sales records
+ * - getSaleById(id): Gets a sale by ID
+ * - createSale(data): Creates a new sale
+ * - updateSale(id, data): Updates sale info
+ * - deleteSale(id): Removes a sale record
+ */
 export class SalesServices {
     constructor(salesRepository) {
         this.salesRepository = salesRepository;

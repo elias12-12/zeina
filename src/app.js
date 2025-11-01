@@ -1,3 +1,8 @@
+/**
+ * Main application configuration file
+ * Sets up Express middleware, CORS, and routes
+ * Exports the configured Express application
+ */
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

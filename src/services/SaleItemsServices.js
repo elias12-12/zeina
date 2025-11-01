@@ -1,6 +1,15 @@
 import { SaleItemsDTO } from '../domain/dto/SaleItemsDTO.js';
 import { pool } from "../config/db.js";
 
+/**
+ * SaleItemsServices - Business logic for sale items operations
+ * Methods:
+ * - getAllSaleItems(): Gets all sale items
+ * - getSaleItemById(id): Gets an item by ID
+ * - createSaleItem(data): Creates a new sale item
+ * - updateSaleItem(id, data): Updates item info
+ * - deleteSaleItem(id): Removes a sale item
+ */
 export class SaleItemsServices {
     constructor(saleItemsRepository) {
         this.saleItemsRepository = saleItemsRepository;

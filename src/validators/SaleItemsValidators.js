@@ -1,3 +1,10 @@
+/**
+ * SaleItemsValidators - express-validator rules for sale items endpoints
+ * Exports:
+ * - saleItemIdParam, saleIdParam: param validators
+ * - createSaleItem: body validators for creating a sale item
+ * - updateSaleItem: body validators for updating a sale item
+ */
 import { body, param } from 'express-validator';
 
 export const saleItemIdParam = [

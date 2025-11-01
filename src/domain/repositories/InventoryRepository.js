@@ -1,6 +1,17 @@
 import { pool } from "../../config/db.js";
 import { Inventory } from "../entities/Inventory.js";
 
+/**
+ * InventoryRepository - Database operations for inventory
+ * Methods:
+ * - create({ product_id, quantity_in_stock })
+ * - findAll()
+ * - findByProductId(product_id)
+ * - update(product_id, quantity_in_stock)
+ * - findAllWithDetails(): returns inventory joined with product info
+ * - findByLowStock(threshold)
+ * - delete(product_id)
+ */
 export class InventoryRepository {
     async create({ product_id, quantity_in_stock }) {
         const sql = `

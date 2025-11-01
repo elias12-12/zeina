@@ -1,6 +1,16 @@
 import { pool } from "../../config/db.js";
 import { Users } from "../entities/Users.js";
 
+/**
+ * UsersRepository - Database operations for users
+ * Methods:
+ * - create(data): create a new user
+ * - update(user_id, data): update user fields
+ * - findAll(): list users
+ * - findById(user_id): get user by id
+ * - findByEmail(email): get user by email (used for login)
+ * - delete(user_id): remove a user
+ */
 export class UsersRepository {
     async create ({first_name,last_name,email,phone_number,password,role}){
         const sql = `INSERT INTO users (first_name,last_name,email,phone_number,password,role)

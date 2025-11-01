@@ -1,3 +1,7 @@
+/**
+ * SalesRoutes - HTTP routes for sales operations (list, create, update, discount, delete)
+ * Exports: SalesRoutes (Express Router)
+ */
 import { Router } from 'express';
 import { SalesRepository } from '../domain/repositories/SalesRepository.js';
 import { SalesServices } from '../services/SalesServices.js';

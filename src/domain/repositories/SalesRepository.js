@@ -1,6 +1,18 @@
 import { pool } from "../../config/db.js";
 import { Sales } from "../entities/Sales.js";
 
+/**
+ * SalesRepository - Database operations for Sales
+ * Methods:
+ * - create({ user_id }) : create a new sale record (initial totals zero)
+ * - updateTotalAmount(sale_id, total_amount) : set total for a sale
+ * - updateWithDiscount(sale_id, subtotal, discount_percentage) : apply discount and update totals
+ * - findAll() : list sales
+ * - findById(id) : get a sale by id
+ * - findBetweenDates(first, second) : list sales between two dates (DD/MM/YYYY)
+ * - findByCustomer(user_id) : list sales for a user
+ * - delete(id) : remove a sale
+ */
 export class SalesRepository {
     //only it takes user_id as a parameter because in the saleItems islinked to it.
    async create({ user_id }) {

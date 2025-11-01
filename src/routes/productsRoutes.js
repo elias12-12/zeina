@@ -1,3 +1,7 @@
+/**
+ * ProductsRoutes - HTTP routes for product CRUD operations
+ * Exports: ProductsRoutes (Express Router)
+ */
 import { Router } from 'express';
 import { ProductsController } from '../controllers/ProductsController.js';
 import { ProductsServices } from '../services/ProductsServices.js';

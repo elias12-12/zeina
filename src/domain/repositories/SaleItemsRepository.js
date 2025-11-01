@@ -1,6 +1,17 @@
 import { pool } from "../../config/db.js";
 import { SaleItems } from "../entities/SaleItems.js";
 
+/**
+ * SaleItemsRepository - Database operations for sale items
+ * Methods:
+ * - create({ sale_id, product_id, quantity, price_at_sale })
+ * - findAll()
+ * - findById(id)
+ * - findBySaleId(sale_id)
+ * - update(sale_item_id, { quantity, price_at_sale })
+ * - delete(sale_item_id)
+ * - findByIdWithDetails(sale_item_id) : returns joined details (sale, user, product)
+ */
 export class SaleItemsRepository {
     async create({ sale_id, product_id, quantity, price_at_sale }) {
         const sql = `

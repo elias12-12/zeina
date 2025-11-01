@@ -1,3 +1,7 @@
+/**
+ * SaleItemsRoutes - HTTP routes for sale-item operations
+ * Exports: SaleItemsRoutes (Express Router)
+ */
 import { Router } from 'express';
 import { SaleItemsRepository } from '../domain/repositories/SaleItemsRepository.js';
 import { SaleItemsServices } from '../services/SaleItemsServices.js';

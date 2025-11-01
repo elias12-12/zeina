@@ -1,6 +1,15 @@
 import { pool } from "../../config/db.js";
 import { Products } from "../entities/Products.js";
 
+/**
+ * ProductsRepository - Database operations for Products
+ * Methods:
+ * - create(data): Creates a new product record
+ * - findAll(): Gets all products
+ * - findById(id): Finds a product by ID
+ * - update(id, data): Updates product record
+ * - delete(id): Removes a product
+ */
 export class ProductsRepository {
     async create({ product_name, description, unit_price, product_type, status }) {
         const sql = `

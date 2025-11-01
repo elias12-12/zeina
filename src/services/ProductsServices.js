@@ -1,3 +1,12 @@
+/**
+ * ProductsServices - Business logic for product operations
+ * Methods:
+ * - createProduct(data): Creates a new product
+ * - getAllProducts(): Retrieves all products
+ * - getProductById(id): Gets a product by ID
+ * - updateProduct(id, data): Updates a product
+ * - deleteProduct(id): Deletes a product
+ */
 export class ProductsServices {
     constructor(productsRepository) {
         this.productsRepository = productsRepository;

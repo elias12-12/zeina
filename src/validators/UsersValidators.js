@@ -1,6 +1,12 @@
-    import {body, param} from 'express-validator';
+/**
+ * UsersValidators - express-validator rules for user endpoints
+ * Exports:
+ * - idParam: param validator for user_id
+ * - upsertUsers: body validators for creating/updating users
+ */
+import { body, param } from 'express-validator';
 
-    export const idParam = [param('user_id')
+export const idParam = [param('user_id')
         .isInt({gt: 0}).withMessage('id must be an integer')
     ];
 

@@ -1,3 +1,8 @@
+/**
+ * errorHandler - Express error-handling middleware
+ * Centralizes error responses for validation, DB errors, and defaults.
+ * Signature: (err, req, res, next)
+ */
 export function errorHandler(err, req, res, next){
     console.error('Error:', err);
     

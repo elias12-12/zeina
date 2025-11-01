@@ -1,5 +1,16 @@
 import { InventoryDTO } from '../domain/dto/InventoryDTO.js';
 
+/**
+ * InventoryServices - Business logic for inventory operations
+ * Methods include:
+ * - createInventoryRecord(product_id, quantity_in_stock)
+ * - getAllInventory()
+ * - getInventoryByProduct(product_id)
+ * - getAllWithDetails()
+ * - getLowStockProducts(threshold)
+ * - updateInventory(product_id, new_quantity)
+ * - deleteInventory(product_id)
+ */
 export class InventoryServices {
     constructor(inventoryRepository) {
         this.inventoryRepository = inventoryRepository;

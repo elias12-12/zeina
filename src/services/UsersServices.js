@@ -1,5 +1,14 @@
 import {UsersDTO} from '../domain/dto/UsersDTO.js';
 
+/**
+ * UsersServices - Business logic for user operations
+ * Methods:
+ * - listUsers(): Gets all users
+ * - getUsers(id): Gets a user by ID
+ * - createUsers(data): Creates a new user
+ * - updateUsers(id, data): Updates user info
+ * - deleteUsers(id): Removes a user
+ */
 export class UsersServices{
     constructor(usersRepository){
         this.usersRepository = usersRepository;
