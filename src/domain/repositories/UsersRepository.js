@@ -12,6 +12,7 @@ import { Users } from "../entities/Users.js";
  * - delete(user_id): remove a user
  */
 export class UsersRepository {
+    /** Create a new user record and return the entity */
     async create ({first_name,last_name,email,phone_number,password,role}){
         const sql = `INSERT INTO users (first_name,last_name,email,phone_number,password,role)
         VALUES ($1, $2, $3, $4, $5, $6)
@@ -21,6 +22,7 @@ export class UsersRepository {
         return new Users(rows[0]);
     }
 
+    /** Update a user by ID and return the updated entity or null */
     async update(user_id, {first_name,last_name,email,phone_number,password,role}){
         const sql = `UPDATE users SET first_name = $1, last_name = $2, email = $3, phone_number = $4, password = $5, role = $6
         WHERE user_id= $7
@@ -30,6 +32,7 @@ export class UsersRepository {
 
         return rows[0] ? new Users(rows[0]) : null;
     }
+    /** Retrieve all users */
     async findAll(){
         const sql = `SELECT user_id,first_name,last_name,email,phone_number,password,role
         FROM users ORDER BY user_id DESC;`
@@ -40,6 +43,7 @@ export class UsersRepository {
 
     
 
+    /** Find a user by ID, or return null */
     async findById(user_id){
         const sql = `SELECT user_id,first_name,last_name,email,phone_number,password,role
         FROM users 
@@ -51,6 +55,7 @@ export class UsersRepository {
 
         return rows[0] ? new Users(rows[0]) : null;
     }
+    /** Find a user by email (used for authentication), or return null */
     async findByEmail(email) {
     const sql = `SELECT user_id, first_name, last_name, email, phone_number, password, role
                  FROM users
@@ -59,6 +64,7 @@ export class UsersRepository {
     return rows[0] ? new Users(rows[0]) : null;
 }
 
+    /** Delete a user by ID; returns true when deleted */
     async delete(user_id) {
         const {rowCount} = await pool.query('DELETE FROM users WHERE user_id = $1', [user_id])
         return rowCount > 0;

@@ -5,10 +5,11 @@
  * - upsertProduct: body validators for creating/updating products
  */
 import { body, param } from 'express-validator';
-
+// Validate :product_id param is a positive integer
 export const idParam = param('product_id')
     .isInt({ min: 1 }).withMessage('Product ID must be a positive integer');
 
+// Body validators for creating/updating products
 export const upsertProduct = [
     body('product_name').notEmpty().withMessage('product_name is required'),
     body('description').notEmpty().withMessage('description is required'),

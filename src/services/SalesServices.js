@@ -14,6 +14,9 @@ export class SalesServices {
         this.salesRepository = salesRepository;
     }
 
+    /**
+     * Retrieve all sales and return as DTOs
+     */
     async getAllSales() {
         try {
             const sales = await this.salesRepository.findAll();
@@ -21,8 +24,12 @@ export class SalesServices {
         } catch (error) {
             throw new Error(`Failed to list sales: ${error.message}`);
         }
+
     }
 
+    /**
+     * Get a sale by ID and return DTO, or null if not found
+     */
     async getSaleById(sale_id) {
         try {
             if (!sale_id || isNaN(sale_id)) {
@@ -34,6 +41,10 @@ export class SalesServices {
             throw new Error(`Failed to get sale: ${error.message}`);
         }
     }
+    
+    /**
+     * Get sales between two dates (DD/MM/YYYY) and return DTOs
+     */
 async getSalesBetweenDates(startDate, endDate) {
     try {
         if (!startDate || !endDate) {
@@ -51,8 +62,12 @@ async getSalesBetweenDates(startDate, endDate) {
     } catch (error) {
         throw new Error(`Failed to get sales: ${error.message}`);
     }
-}
 
+    }
+
+    /**
+     * Get sales for a specific customer (user_id) and return DTOs
+     */
     async getSalesByCustomer(user_id) {
         try {
             if (!user_id || isNaN(user_id)) {
@@ -63,8 +78,12 @@ async getSalesBetweenDates(startDate, endDate) {
         } catch (error) {
             throw new Error(`Failed to get sales by customer: ${error.message}`);
         }
+
     }
 
+    /**
+     * Create a new sale for a given user_id and return DTO
+     */
     async createSale(user_id) {
         try {
             if (!user_id || isNaN(user_id)) {
@@ -75,8 +94,12 @@ async getSalesBetweenDates(startDate, endDate) {
         } catch (error) {
             throw new Error(`Failed to create sale: ${error.message}`);
         }
+
     }
 
+    /**
+     * Update the total amount for a sale and return updated DTO
+     */
     async updateSaleTotal(sale_id, total_amount) {
         try {
             if (!sale_id || isNaN(sale_id)) {
@@ -90,9 +113,13 @@ async getSalesBetweenDates(startDate, endDate) {
         } catch (error) {
             throw new Error(`Failed to update sale total: ${error.message}`);
         }
-    }
 
-       async applyDiscount(sale_id, discount_percentage) {
+     }
+
+         /**
+          * Apply a discount percentage to a sale and update totals; return updated DTO
+          */
+         async applyDiscount(sale_id, discount_percentage) {
         try {
             if (!sale_id || isNaN(sale_id)) {
                 throw new Error('Invalid sale ID');
@@ -114,8 +141,12 @@ async getSalesBetweenDates(startDate, endDate) {
         } catch (error) {
             throw new Error(`Failed to apply discount: ${error.message}`);
         }
+
     }
 
+    /**
+     * Delete a sale by ID; returns true if deleted
+     */
     async deleteSale(sale_id) {
         try {
             if (!sale_id || isNaN(sale_id)) {

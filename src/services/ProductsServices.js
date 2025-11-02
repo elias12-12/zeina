@@ -12,6 +12,7 @@ export class ProductsServices {
         this.productsRepository = productsRepository;
     }
 
+    /** Create a new product from productData and return the created entity */
     async createProduct(productData) {
         try {
             if (!productData.product_name || !productData.unit_price || !productData.product_type || !productData.status) {
@@ -23,6 +24,7 @@ export class ProductsServices {
         }
     }
 
+    /** Retrieve all products */
     async getAllProducts() {
         try {
             return await this.productsRepository.findAll();
@@ -31,6 +33,7 @@ export class ProductsServices {
         }
     }
 
+    /** Get a product by ID or throw on invalid id */
     async getProductById(product_id) {
         try {
             if (!product_id || isNaN(product_id)) 
@@ -43,6 +46,7 @@ export class ProductsServices {
         }
     }
 
+    /** Update a product by ID with provided updates and return updated entity */
     async updateProduct(product_id, updates) {
         try {
             if (!product_id || isNaN(product_id))
@@ -58,6 +62,7 @@ export class ProductsServices {
         }
     }
 
+    /** Delete a product by ID; returns true when deleted */
     async deleteProduct(product_id) {
         try {
             if (!product_id || isNaN(product_id)) 

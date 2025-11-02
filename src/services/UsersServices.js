@@ -14,6 +14,9 @@ export class UsersServices{
         this.usersRepository = usersRepository;
     }
 
+    /**
+     * List all users and return DTOs
+     */
     async listUsers(){
         try {
             const users = await this.usersRepository.findAll();
@@ -23,6 +26,9 @@ export class UsersServices{
         }
     }
 
+    /**
+     * Get a single user by ID and return a DTO, or null if not found
+     */
         async getUsers(user_id){
             try {
                 if (!user_id || isNaN(user_id)) {
@@ -37,7 +43,11 @@ export class UsersServices{
                 throw new Error(`Failed to get user: ${error.message}`);
             }
         }
-     async getUserById(user_id) {
+
+        /**
+        * Alias: get user by id (returns DTO or null)
+        */
+        async getUserById(user_id) {
         try {
             if (!user_id || isNaN(user_id)) {
                 throw new Error('Invalid user ID');
@@ -49,8 +59,12 @@ export class UsersServices{
         } catch (error) {
             throw new Error(`Failed to get user: ${error.message}`);
         }
+
     }
 
+    /**
+     * Create a new user record from provided data and return a DTO
+     */
     async createUsers(data){
         try {
             if (!data || !data.first_name || !data.last_name || !data.email || !data.phone_number || !data.password || !data.role) {
@@ -61,8 +75,12 @@ export class UsersServices{
         } catch (error) {
             throw new Error(`Failed to create user: ${error.message}`);
         }
+
     }
 
+    /**
+     * Update an existing user and return the updated DTO, or null if not found
+     */
     async updateUsers(user_id, data){
         try {
             if (!user_id || isNaN(user_id)) {
@@ -76,8 +94,12 @@ export class UsersServices{
         } catch (error) {
             throw new Error(`Failed to update user: ${error.message}`);
         }
+
     }
 
+    /**
+     * Delete a user by ID, returns true if deleted
+     */
     async deleteUsers(user_id){
         try {
             if (!user_id || isNaN(user_id)) {
@@ -87,8 +109,12 @@ export class UsersServices{
         } catch (error) {
             throw new Error(`Failed to delete user: ${error.message}`);
         }
+
     }
 
+    /**
+     * Register a new user (same as create) and return DTO
+     */
     async registerUser(userData) {
         try {
             const { first_name, last_name, email, phone_number, password, role } = userData;
@@ -104,6 +130,10 @@ export class UsersServices{
             throw new Error(`Failed to register user: ${error.message}`);
         }
     }
+
+    /**
+     * Authenticate a user by email and password. Returns message and user DTO on success.
+     */
     async loginUser(email, password) {
     try {
         if (!email || !password) {

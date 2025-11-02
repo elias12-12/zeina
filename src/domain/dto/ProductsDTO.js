@@ -19,6 +19,6 @@ export class ProductsDTO {
     }
 
      static fromEntity(entity){
-        return new UsersDTO(entity);
+        return new ProductsDTO(entity);
     }
 }

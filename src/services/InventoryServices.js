@@ -16,6 +16,7 @@ export class InventoryServices {
         this.inventoryRepository = inventoryRepository;
     }
 
+    /** Create an inventory record for product_id and return a DTO */
     async createInventoryRecord(product_id, quantity_in_stock) {
         try {
             if (!product_id || isNaN(product_id)) {
@@ -32,6 +33,7 @@ export class InventoryServices {
         }
     }
 
+    /** Return all inventory records as DTOs */
     async getAllInventory() {
         try {
             const inventory = await this.inventoryRepository.findAll();
@@ -41,6 +43,7 @@ export class InventoryServices {
         }
     }
 
+    /** Get inventory record for a specific product_id or null if missing */
     async getInventoryByProduct(product_id) {
         try {
             if (!product_id || isNaN(product_id)) {
@@ -52,6 +55,7 @@ export class InventoryServices {
             throw new Error(`Failed to get inventory by product: ${error.message}`);
         }
     }
+    /** Get inventory joined with product details (returns simple objects) */
     async getAllWithDetails(){
         try {
             const inventory=await this.inventoryRepository.findAllWithDetails();
@@ -67,6 +71,7 @@ export class InventoryServices {
         }
     }
 
+    /** Get products with stock below threshold (default 5) */
     async getLowStockProducts(threshold = 5) {
     try {
         if (isNaN(threshold) || threshold < 0) {
@@ -88,6 +93,7 @@ export class InventoryServices {
     }
 }
 
+    /** Update inventory quantity for product_id and return DTO or null */
     async updateInventory(product_id, new_quantity) {
         try {
             if (!product_id || isNaN(product_id)) {
@@ -104,6 +110,7 @@ export class InventoryServices {
         }
     }
 
+    /** Delete inventory record for product_id; returns true when deleted */
     async deleteInventory(product_id) {
         try {
             if (!product_id || isNaN(product_id)) {

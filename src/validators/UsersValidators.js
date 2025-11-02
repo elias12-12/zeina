@@ -6,10 +6,12 @@
  */
 import { body, param } from 'express-validator';
 
+// Validate that :user_id route param is a positive integer
 export const idParam = [param('user_id')
         .isInt({gt: 0}).withMessage('id must be an integer')
     ];
 
+// Body validators for creating/updating users (first_name,last_name,email,password,phone_number,role)
     export const upsertUsers = [
         body('first_name').isString().isLength({min: 1, max: 255}).withMessage('first name must be a string between 1-255 characters'),
         body('last_name').isString().isLength({min: 1, max: 255}).withMessage('last name must be a string between 1-255 characters'),

@@ -8,15 +8,17 @@
  * - getSaleBetweenDates: query validators for date range (DD/MM/YYYY)
  */
 import { param, body, query } from 'express-validator';
-
+// Validate :sale_id param is a positive integer
 export const idParam = [
     param('sale_id').isInt({ gt: 0 }).withMessage('sale_id must be a positive integer')
 ];
 
+// Validate :user_id param is a positive integer
 export const userIdParam = [
     param('user_id').isInt({ gt: 0 }).withMessage('user_id must be a positive integer')
 ];
 
+// Body validators for creating/updating sales (user_id, total_amount, sale_date)
 export const upsertSales = [
     body('user_id').optional().isInt({ gt: 0 }).withMessage('user_id must be a positive integer'),
     body('total_amount').optional().isFloat({ gt: 0 }).withMessage('total_amount must be a positive number if provided'),
@@ -26,6 +28,7 @@ export const upsertSales = [
 export const applyDiscountValidator = [
     body('discount_percentage').isFloat({ min: 0, max: 100 }).withMessage('Discount percentage must be between 0 and 100')
 ];
+// Validate discount_percentage in body when applying a discount
 export const getSaleBetweenDates = [
     query('startDate')
         .notEmpty()

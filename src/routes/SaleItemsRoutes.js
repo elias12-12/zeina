@@ -14,7 +14,7 @@ const service = new SaleItemsServices(repo);
 const controller = new SaleItemsControllers(service);
 
 export const SaleItemsRoutes = Router();
-
+// Routes for sale items (list, get, create, update, delete, details)
 SaleItemsRoutes.get('/', controller.list);
 SaleItemsRoutes.get('/:sale_item_id', saleItemIdParam, controller.get);
 SaleItemsRoutes.get('/sale/:sale_id', saleIdParam, controller.getBySaleId);

@@ -15,6 +15,7 @@ const controller = new SalesControllers(service);
 
 export const SalesRoutes = Router();
 
+// Routes for sales (list, query by date/customer, create, update, discount, delete)
 SalesRoutes.get('/', controller.list);
 SalesRoutes.get('/by-date-range', getSaleBetweenDates, controller.getSalesBetweenDates);
 SalesRoutes.get('/:sale_id', idParam, controller.get);

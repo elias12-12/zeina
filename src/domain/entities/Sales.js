@@ -9,7 +9,15 @@
  * - discount_amount: number
  * - total_amount: number
  */
+/**
+ * Sales entity — represents a sales transaction
+ * Fields: sale_id, user_id, sale_date, subtotal, discount_percentage, discount_amount, total_amount
+ */
 export class Sales{
+    /**
+     * Construct a Sales entity from a plain object (DB row)
+     * @param {Object} param0 - sale fields
+     */
     constructor({sale_id = null, user_id = null, sale_date = new Date(), subtotal, discount_percentage, discount_amount, total_amount = 0}) {
         this.sale_id = sale_id;
         this.user_id = user_id;

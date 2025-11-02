@@ -13,6 +13,7 @@ import { SaleItems } from "../entities/SaleItems.js";
  * - findByIdWithDetails(sale_item_id) : returns joined details (sale, user, product)
  */
 export class SaleItemsRepository {
+    /** Insert a sale_item and return the created entity */
     async create({ sale_id, product_id, quantity, price_at_sale }) {
         const sql = `
             INSERT INTO sale_items (sale_id, product_id, quantity, price_at_sale)
@@ -23,24 +24,28 @@ export class SaleItemsRepository {
         return new SaleItems(rows[0]);
     }
 
+    /** Retrieve all sale items */
     async findAll() {
         const sql = `SELECT sale_item_id, sale_id, product_id, quantity, price_at_sale FROM sale_items ORDER BY sale_item_id DESC;`;
         const { rows } = await pool.query(sql);
         return rows.map(r => new SaleItems(r));
     }
 
+    /** Find a sale item by ID, or return null */
     async findById(sale_item_id) {
         const sql = `SELECT sale_item_id, sale_id, product_id, quantity, price_at_sale FROM sale_items WHERE sale_item_id = $1;`;
         const { rows } = await pool.query(sql, [sale_item_id]);
         return rows[0] ? new SaleItems(rows[0]) : null;
     }
 
+    /** Find sale items by sale_id and return array */
     async findBySaleId(sale_id) {
         const sql = `SELECT sale_item_id, sale_id, product_id, quantity, price_at_sale FROM sale_items WHERE sale_id = $1 ORDER BY sale_item_id DESC;`;
         const { rows } = await pool.query(sql, [sale_id]);
         return rows.map(r => new SaleItems(r));
     }
 
+    /** Update a sale_item fields and return updated entity or null */
     async update(sale_item_id, { quantity, price_at_sale }) {
         const sql = `
             UPDATE sale_items
@@ -52,11 +57,13 @@ export class SaleItemsRepository {
         return rows[0] ? new SaleItems(rows[0]) : null;
     }
 
+    /** Delete a sale_item by ID; returns true when deleted */
     async delete(sale_item_id) {
         const { rowCount } = await pool.query(`DELETE FROM sale_items WHERE sale_item_id = $1`, [sale_item_id]);
         return rowCount > 0;
     }
 
+    /** Find a sale_item with joined details (sale, user, product) */
     async findByIdWithDetails(sale_item_id) {
     const sql = `
         SELECT 

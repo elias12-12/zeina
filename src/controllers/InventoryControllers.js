@@ -17,25 +17,15 @@ import { validationResult } from 'express-validator';
  *   router.get('/inventory', controller.list);
  *
  */
+
 export class InventoryControllers {
-    /**
-     * Create an InventoryControllers instance.
-     * @param {Object} inventoryService - Service implementing inventory operations.
-     *   Expected methods: getAllInventory, getInventoryByProduct, createInventoryRecord,
-     *   updateInventory, deleteInventory, getAllWithDetails, getLowStockProducts
-     */
     constructor(inventoryService) {
         this.inventoryService = inventoryService;
     }
 
     /**
-     * Validate the request using express-validator rules attached to the route.
-     * If validation errors exist, throws an Error with name "ValidationError"
-     * and a `details` property containing the array of issues.
-     *
-     * @param {import('express').Request} req
-     * @throws {Error} ValidationError with `details` array
-     * @private
+     * Validate request using express-validator.
+     * Throws an Error with name 'ValidationError' and details array if invalid.
      */
     _validate(req) {
         const errors = validationResult(req);
@@ -48,12 +38,8 @@ export class InventoryControllers {
     }
 
     /**
-     * GET /inventory
-     * Return an array of inventory records.
-     *
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
+     * List all inventory records.
+     * Responds with JSON array of inventory DTOs.
      */
     list = async (req, res, next) => {
         try {
@@ -65,15 +51,8 @@ export class InventoryControllers {
     }
 
     /**
-     * GET /inventory/:product_id
-     * Retrieve the inventory record for a single product.
-     *
-     * Validates the request first (e.g. that product_id is present/valid).
-     * Returns 404 if no record exists for the given product_id.
-     *
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
+     * Get inventory record for a specific product.
+     * Expects req.params.product_id. Returns 404 if not found.
      */
     getByProduct = async (req, res, next) => {
         try {
@@ -88,13 +67,8 @@ export class InventoryControllers {
     }
 
     /**
-     * POST /inventory
      * Create a new inventory record.
-     * Expects product_id and quantity_in_stock in the request body.
-     *
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
+     * Expects product_id and quantity_in_stock in req.body. Returns 201 with the created record.
      */
     create = async (req, res, next) => {
         try {
@@ -110,13 +84,8 @@ export class InventoryControllers {
     }
 
     /**
-     * PUT /inventory/:product_id
-     * Update the quantity_in_stock for an existing inventory record.
-     * Returns 404 if the inventory record does not exist.
-     *
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
+     * Update the inventory quantity for a product.
+     * Expects req.params.product_id and req.body.quantity_in_stock. Returns 404 if not found.
      */
     update = async (req, res, next) => {
         try {
@@ -134,13 +103,8 @@ export class InventoryControllers {
     }
 
     /**
-     * DELETE /inventory/:product_id
-     * Delete the inventory record for the given product.
-     * Returns 204 on success, 404 if not found.
-     *
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
+     * Delete an inventory record by product_id.
+     * Returns 204 on success or 404 if no record existed.
      */
     delete = async (req, res, next) => {
         try {
@@ -153,6 +117,10 @@ export class InventoryControllers {
             next(err);
         }
     }
+    /**
+     * Get inventory records joined with product details.
+     * Returns an array of records with product_name and other product info.
+     */
     getAllWithDetails = async (req, res, next) => {
     try {
         const inventory = await this.inventoryService.getAllWithDetails();
@@ -164,15 +132,11 @@ export class InventoryControllers {
         next(err);
     }
 };
+    
     /**
-     * GET /inventory/low-stock?threshold=5
-     * Return products with quantity_in_stock less than or equal to `threshold`.
-     * If threshold query param is not provided, defaults to 5.
-     * Validates that threshold is a non-negative number.
-     *
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
+     * Get products with low stock.
+     * Optional query param: threshold (defaults to 5).
+     * Responds with { threshold, count, items }.
      */
     getLowStock = async (req, res, next) => {
         try {

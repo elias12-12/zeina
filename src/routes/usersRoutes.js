@@ -20,6 +20,7 @@ const controller = new UsersController(service);
 
 export const UsersRoutes = Router();
 
+// CRUD and auth routes for users
 UsersRoutes.get('/', controller.list);
 UsersRoutes.get('/:user_id', idParam, controller.get);
 UsersRoutes.put('/:user_id', [...idParam, upsertUsers], controller.update);
