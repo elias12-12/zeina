@@ -64,19 +64,6 @@ async getSalesBetweenDates(startDate, endDate) {
     }
 
     }
-    async getSaleByTotalAmount(number){
-        try {
-            if(isNaN(number)|| number<0){
-                throw new Error(`Number must be a positive`)
-            }
-            const sale= await this.salesRepository.findByTotalAmount(number);
-            return sale.map(r=> SalesDTO.fromEntity(r));
-            
-        } catch (error) {
-            throw new Error(`Invalid number: ${error.message}`);
-        }
-    }
-
     /**
      * Get sales for a specific customer (user_id) and return DTOs
      */

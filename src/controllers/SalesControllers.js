@@ -115,17 +115,6 @@ export class SalesControllers {
             next(err);
         }
     }
-    getSalesByTotalAmount= async(req , res, next)=>{
-        try {
-            this._validate(req);
-            const number=parseFloat(req.query);
-            const getting=await this.salesService.getSaleByTotalAmount(number);
-            res.json(getting);
-        } catch (err) {
-            next(err)
-        }
-    }
-
     // Delete a sale — req.params.sale_id
     delete = async (req, res, next) => {
         try {
