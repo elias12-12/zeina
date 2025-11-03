@@ -1,5 +1,5 @@
 /**
- * Inventory entity — minimal documentation
+ * Inventory entity 
  * Fields (simple types):
  * - inventory_id: number | null
  * - product_id: number | null

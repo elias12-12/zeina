@@ -42,3 +42,6 @@ export const getSaleBetweenDates = [
         .matches(/^\d{2}\/\d{2}\/\d{4}$/)
         .withMessage('endDate must be in DD/MM/YYYY format (e.g., 31/10/2025)')
 ];
+export const getSaleByTotalAmount=[
+    query('amount').notEmpty().withMessage('amount is required').isFloat({min : 0}).withMessage("")
+];
