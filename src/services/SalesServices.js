@@ -41,6 +41,14 @@ export class SalesServices {
             throw new Error(`Failed to get sale: ${error.message}`);
         }
     }
+    async getTotal(){
+        try {
+            const total=await this.salesRepository.getTotal();
+            return total;
+        } catch (error) {
+            throw new Error(`Failed to get total: ${error.message}`);
+        }
+    }
     
     /**
      * Get sales between two dates (DD/MM/YYYY) and return DTOs

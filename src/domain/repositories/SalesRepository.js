@@ -84,12 +84,17 @@ export class SalesRepository {
     const { rows } = await pool.query(sql, [startDate, endDate]);
     return rows.map(r => new Sales(r));
 }
-
     /** Find sales by customer user_id */
     async findByCustomer(user_id) {
         const sql = `SELECT sale_id, user_id, subtotal, discount_percentage, discount_amount, total_amount, TO_CHAR(sale_date, 'DD/MM/YYYY') as sale_date FROM sales WHERE user_id = $1 ORDER BY sale_id DESC;`;
         const { rows } = await pool.query(sql, [user_id]);
         return rows.map(r => new Sales(r));
+    }
+//get the total amount of all sales
+    async getTotal(){
+        const sql = `SELECT SUM(total_amount) as total FROM sales`
+        const {rows}=await pool.query(sql);
+        return rows[0].total;
     }
 
     /** Delete a sale by ID; returns true when deleted */

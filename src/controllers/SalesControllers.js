@@ -35,6 +35,14 @@ export class SalesControllers {
             next(err);
         }
     }
+    listTotal = async(req, res, next) => {
+        try {
+            const sales=await this.salesService.getTotal();
+            res.json(sales);
+        } catch (err) {
+            next(err);
+        }
+    }
 
     // Get a single sale by ID — req.params.sale_id
     get = async (req, res, next) => {
