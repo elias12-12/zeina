@@ -102,4 +102,9 @@ export class SalesRepository {
         const { rowCount } = await pool.query(`DELETE FROM sales WHERE sale_id = $1`, [sale_id]);
         return rowCount > 0;
     }
+    async getCount(){
+        const sql=`SELECT COUNT(*) as total_counts FROM sales`
+        const {rows}=await pool.query(sql);
+         return parseInt(rows[0].total_counts);
+    }
 }

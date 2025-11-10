@@ -37,7 +37,7 @@ export class SaleItemsControllers {
      * @throws {Error} ValidationError
      * @private
      */
-    _validate(req) {
+    _validate(req) {    
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const err = new Error("Validation Error");

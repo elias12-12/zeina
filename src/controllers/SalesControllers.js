@@ -106,6 +106,15 @@ export class SalesControllers {
             next(err);
         }
     }
+    getCounts= async(req,res,next)=>{
+        try {
+            const count=await this.salesService.getCount();
+            res.status(200).json(count);
+            
+        } catch (err) {
+            next(err);
+        }
+    }
 
     // Get sales between dates — expects query strings startDate, endDate (ISO strings)
     getSalesBetweenDates = async (req, res, next) => {

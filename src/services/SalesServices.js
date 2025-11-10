@@ -87,6 +87,15 @@ async getSalesBetweenDates(startDate, endDate) {
         }
 
     }
+    async getCount(){
+        try {
+            const count=await this.salesRepository.getCount();
+            return count;
+            
+        } catch (error) {
+            throw new Error('Failed to get all sales counts');
+        }
+    }
 
     /**
      * Create a new sale for a given user_id and return DTO
@@ -163,5 +172,5 @@ async getSalesBetweenDates(startDate, endDate) {
         } catch (error) {
             throw new Error(`Failed to delete sale: ${error.message}`);
         }
-    }
+    } 
 }

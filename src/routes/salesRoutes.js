@@ -17,6 +17,7 @@ export const SalesRoutes = Router();
 
 // Routes for sales (list, query by date/customer, create, update, discount, delete)
 SalesRoutes.get('/', controller.list);
+SalesRoutes.get('/count',controller.getCounts);
 SalesRoutes.get('/total',controller.listTotal);
 SalesRoutes.get('/by-date-range', getSaleBetweenDates, controller.getSalesBetweenDates);
 SalesRoutes.get('/:sale_id', idParam, controller.get);
@@ -25,3 +26,4 @@ SalesRoutes.post('/', upsertSales, controller.create);
 SalesRoutes.put('/:sale_id', [...idParam, upsertSales], controller.update);
 SalesRoutes.put('/:sale_id/discount', [...idParam, ...applyDiscountValidator], controller.applyDiscount);
 SalesRoutes.delete('/:sale_id', idParam, controller.delete);
+

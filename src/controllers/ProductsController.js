@@ -77,7 +77,6 @@ export class ProductsController {
             next(err);
         }
     }
-
     /**
      * POST /products
      * Create a new product. Expects product fields in the request body.
