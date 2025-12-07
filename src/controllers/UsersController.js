@@ -1,7 +1,7 @@
 import {validationResult} from 'express-validator'
 
 /**
- * UsersController — minimal documentation
+ * UsersController — API-only handlers
  * Common request pieces:
  * - req.params.user_id: number|string
  * - req.body: object (user fields for create/update)
@@ -12,8 +12,7 @@ export class UsersController{
         this.userServices = userServices;
     }
 
-    // Validate request using express-validator. If invalid, respond 400 and
-    // return the response object; otherwise return null so callers continue.
+    // Validate request using express-validator. If invalid, respond 400.
     _validate(req, res){
         const errors = validationResult(req);
         if(!errors.isEmpty()){
@@ -25,7 +24,8 @@ export class UsersController{
     // GET /users — list all users
     list = async (req, res, next) =>{
         try{
-            res.json(await this.userServices.listUsers());
+            const users = await this.userServices.listUsers();
+            return res.json(users);
         }catch(e){
             next(e);
         }
@@ -39,9 +39,9 @@ export class UsersController{
             }
             const data = await this.userServices.getUsers(req.params.user_id);
             if(!data){
-                return res.status(404).json({message: 'Not Found'})
+                return res.status(404).json({message: 'Not Found'});
             }
-            res.status(200).json(data)
+            return res.status(200).json(data);
         }catch(e){
             next(e);
         }
@@ -51,12 +51,27 @@ export class UsersController{
     create = async (req, res, next) =>{
         try{
             if(this._validate(req, res)){
-            return;
-        }
-        const data = await this.userServices.createUsers(req.body);
-        res.status(201).json(data);
+                return;
+            }
+            const data = await this.userServices.createUsers(req.body);
+            return res.status(201).json(data);
         }catch(e){
             next(e);
+        }
+    }
+
+    // POST /users/register — public registration for customers
+    register = async (req, res, next) => {
+        try {
+            if (this._validate(req, res)) return;
+            // Ensure role is set to 'customer' for public registration
+            console.log('Register controller received req.body:', req.body);
+            const input = { ...req.body, role: 'customer' };
+            console.log('Register controller sending to service:', input);
+            const data = await this.userServices.registerUser(input);
+            return res.status(201).json(data);
+        } catch (err) {
+            next(err);
         }
     }
 
@@ -64,14 +79,13 @@ export class UsersController{
     update = async (req, res, next) =>{
         try{
             if(this._validate(req, res)){
-            return;
-        }
-
-        const data = await this.userServices.updateUsers(req.params.user_id, req.body);
-        if(!data){
-            return res.status(404).json({message: 'No data found'});
-        }
-        res.status(201).json(data)
+                return;
+            }
+            const data = await this.userServices.updateUsers(req.params.user_id, req.body);
+            if(!data){
+                return res.status(404).json({message: 'No data found'});
+            }
+            return res.status(201).json(data);
         }catch(e){
             next(e);
         }
@@ -83,27 +97,24 @@ export class UsersController{
             if(this._validate(req, res)){
                 return;
             }
-
             const ok = await this.userServices.deleteUsers(req.params.user_id);
             if(!ok){
                 return res.status(404).json('Not found');
             }
-            
-            res.status(204).send();
-
+            return res.status(204).send();
         }catch(e){
             next(e);
         }
     }
 
     // POST /users/login — login with { email, password }
-    login = async (req, res) => {
+    login = async (req, res, next) => {
         try {
             const { email, password } = req.body;
             const result = await this.userServices.loginUser(email, password);
-            res.json(result);
+            return res.json(result);
         } catch (err) {
-            res.status(400).json({ error: err.message });
+            return res.status(400).json({ error: err.message });
         }
     }
 }

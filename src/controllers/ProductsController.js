@@ -14,6 +14,8 @@ import { validationResult } from 'express-validator';
  * and include a `details` array with validation issues.
  */
 export class ProductsController {
+        // Note: form rendering for Add/Edit is handled inside the existing
+        // `create` and `update` methods so HTML and API flows are colocated.
     /**
      * Create a new ProductsController
      * @param {Object} productsService - service implementing product operations
@@ -52,7 +54,7 @@ export class ProductsController {
     list = async (req, res, next) => {
         try {
             const products = await this.productsService.getAllProducts();
-            res.json(products);
+            return res.json(products);
         } catch (err) {
             next(err);
         }
@@ -70,9 +72,10 @@ export class ProductsController {
         try {
             this._validate(req);
             const product = await this.productsService.getProductById(req.params.product_id);
-            if (!product)
-                return res.status(404).json({ message: "Product not found" });
-            res.json(product);
+            if (!product) {
+                return res.status(404).json({message: 'Not Found'});
+            }
+            return res.json(product);
         } catch (err) {
             next(err);
         }
@@ -89,7 +92,7 @@ export class ProductsController {
         try {
             this._validate(req);
             const newProduct = await this.productsService.createProduct(req.body);
-            res.status(201).json(newProduct);
+            return res.status(201).json(newProduct);
         } catch (err) {
             next(err);
         }
@@ -107,9 +110,10 @@ export class ProductsController {
         try {
             this._validate(req);
             const updatedProduct = await this.productsService.updateProduct(req.params.product_id, req.body);
-            if (!updatedProduct)
+            if (!updatedProduct) {
                 return res.status(404).json({ message: "Product not found" });
-            res.json(updatedProduct);
+            }
+            return res.json(updatedProduct);
         } catch (err) {
             next(err);
         }
@@ -127,9 +131,10 @@ export class ProductsController {
         try {
             this._validate(req);
             const deleted = await this.productsService.deleteProduct(req.params.product_id);
-            if (!deleted)
+            if (!deleted) {
                 return res.status(404).json({ message: "Product not found" });
-            res.status(204).send();
+            }
+            return res.status(204).send();
         } catch (err) {
             next(err);
         }

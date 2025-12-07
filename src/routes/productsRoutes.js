@@ -15,7 +15,7 @@ const controller = new ProductsController(service);
 
 export const ProductsRoutes = Router();
 
-// CRUD routes for products
+// CRUD routes for products (API only)
 ProductsRoutes.get('/', controller.list);
 ProductsRoutes.get('/:product_id', idParam, controller.get);
 ProductsRoutes.post('/', upsertProduct, controller.create);

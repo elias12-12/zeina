@@ -44,7 +44,7 @@ export class InventoryControllers {
     list = async (req, res, next) => {
         try {
             const inventory = await this.inventoryService.getAllInventory();
-            res.json(inventory);
+            return res.json(inventory);
         } catch (err) {
             next(err);
         }
@@ -58,9 +58,10 @@ export class InventoryControllers {
         try {
             this._validate(req);
             const inventory = await this.inventoryService.getInventoryByProduct(req.params.product_id);
-            if (!inventory)
+            if (!inventory) {
                 return res.status(404).json({ message: "Inventory record not found" });
-            res.json(inventory);
+            }
+            return res.json(inventory);
         } catch (err) {
             next(err);
         }
@@ -77,7 +78,7 @@ export class InventoryControllers {
                 req.body.product_id,
                 req.body.quantity_in_stock
             );
-            res.status(201).json(inventory);
+            return res.status(201).json(inventory);
         } catch (err) {
             next(err);
         }
@@ -94,9 +95,10 @@ export class InventoryControllers {
                 req.params.product_id,
                 req.body.quantity_in_stock
             );
-            if (!inventory)
+            if (!inventory) {
                 return res.status(404).json({ message: "Inventory record not found" });
-            res.json(inventory);
+            }
+            return res.json(inventory);
         } catch (err) {
             next(err);
         }
@@ -110,9 +112,10 @@ export class InventoryControllers {
         try {
             this._validate(req);
             const deleted = await this.inventoryService.deleteInventory(req.params.product_id);
-            if (!deleted)
+            if (!deleted) {
                 return res.status(404).json({ message: "Inventory record not found" });
-            res.status(204).send();
+            }
+            return res.status(204).send();
         } catch (err) {
             next(err);
         }
@@ -124,10 +127,10 @@ export class InventoryControllers {
     getAllWithDetails = async (req, res, next) => {
     try {
         const inventory = await this.inventoryService.getAllWithDetails();
-        if (!inventory || inventory.length === 0)
+        if (!inventory || inventory.length === 0) {
             return res.status(404).json({ message: "No inventory records found" });
-        
-        res.json(inventory);
+        }
+        return res.json(inventory);
     } catch (err) {
         next(err);
     }
@@ -156,4 +159,6 @@ export class InventoryControllers {
             next(err);
         }
     }
+
+
 }

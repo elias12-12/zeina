@@ -1,4 +1,5 @@
 import {UsersDTO} from '../domain/dto/UsersDTO.js';
+import bcrypt from 'bcrypt';
 
 /**
  * UsersServices - Business logic for user operations
@@ -70,7 +71,12 @@ export class UsersServices{
             if (!data || !data.first_name || !data.last_name || !data.email || !data.phone_number || !data.password || !data.role) {
                 throw new Error('Missing required fields: first_name,last_name,email,phone_number,password,role');
             }
-            const user = await this.usersRepository.create(data);
+
+            // Hash password before storing
+            const saltRounds = 10;
+            const hashed = await bcrypt.hash(data.password, saltRounds);
+            const payload = { ...data, password: hashed };
+            const user = await this.usersRepository.create(payload);
             return UsersDTO.fromEntity(user);
         } catch (error) {
             throw new Error(`Failed to create user: ${error.message}`);
@@ -123,10 +129,18 @@ export class UsersServices{
                 throw new Error('Missing required fields: first_name, last_name, email, phone_number, password, role');
             }
 
-            const newUser = await this.usersRepository.create(userData);
+            // Ensure role is customer for public registration
+            const data = { ...userData, role: userData.role || 'customer' };
+            // Hash password
+            const saltRounds = 10;
+            const hashed = await bcrypt.hash(data.password, saltRounds);
+            const payload = { ...data, password: hashed };
+            console.log('Registering user with payload:', payload);
+            const newUser = await this.usersRepository.create(payload);
             return UsersDTO.fromEntity(newUser);
 
         } catch (error) {
+            console.error('Register user error:', error, 'userData was:', userData);
             throw new Error(`Failed to register user: ${error.message}`);
         }
     }
@@ -146,8 +160,9 @@ export class UsersServices{
             throw new Error('Invalid email or password');
         }
 
-        // Compare passwords
-        if (user.password !== password) {
+        // Compare passwords using bcrypt
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
             throw new Error('Invalid email or password');
         }
 

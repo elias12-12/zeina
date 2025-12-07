@@ -20,9 +20,10 @@ export const userIdParam = [
 
 // Body validators for creating/updating sales (user_id, total_amount, sale_date)
 export const upsertSales = [
-    body('user_id').optional().isInt({ gt: 0 }).withMessage('user_id must be a positive integer'),
-    body('total_amount').optional().isFloat({ gt: 0 }).withMessage('total_amount must be a positive number if provided'),
-    body('sale_date').optional().isISO8601().withMessage('sale_date must be a valid date (ISO 8601 format)')
+    // treat empty strings as absent (checkFalsy) so form fields left blank don't fail validation
+    body('user_id').optional({ checkFalsy: true }).isInt({ gt: 0 }).withMessage('user_id must be a positive integer'),
+    body('total_amount').optional({ checkFalsy: true }).isFloat({ gt: 0 }).withMessage('total_amount must be a positive number if provided'),
+    body('sale_date').optional({ checkFalsy: true }).isISO8601().withMessage('sale_date must be a valid date (ISO 8601 format)')
 ];
 
 export const applyDiscountValidator = [

@@ -30,7 +30,7 @@ export class SalesControllers {
     list = async (req, res, next) => {
         try {
             const sales = await this.salesService.getAllSales();
-            res.json(sales);
+            return res.json(sales);
         } catch (err) {
             next(err);
         }
@@ -49,9 +49,10 @@ export class SalesControllers {
         try {
             this._validate(req);
             const sale = await this.salesService.getSaleById(req.params.sale_id);
-            if (!sale)
-                return res.status(404).json({ message: "Sale not found" });
-            res.json(sale);
+            if (!sale) {
+                return res.status(404).json({message: 'Not Found'});
+            }
+            return res.json(sale);
         } catch (err) {
             next(err);
         }
@@ -62,8 +63,9 @@ export class SalesControllers {
         try {
             this._validate(req);
             const sales = await this.salesService.getSalesByCustomer(req.params.user_id);
-            if (!sales || sales.length === 0)
+            if (!sales || sales.length === 0) {
                 return res.status(404).json({ message: "No sales found for this customer" });
+            }
             res.json(sales);
         } catch (err) {
             next(err);
@@ -75,7 +77,7 @@ export class SalesControllers {
         try {
             this._validate(req);
             const newSale = await this.salesService.createSale(req.body.user_id);
-            res.status(201).json(newSale);
+            return res.status(201).json(newSale);
         } catch (err) {
             next(err);
         }
@@ -86,9 +88,10 @@ export class SalesControllers {
         try {
             this._validate(req);
             const updatedSale = await this.salesService.updateSaleTotal(req.params.sale_id, req.body.total_amount);
-            if (!updatedSale)
+            if (!updatedSale) {
                 return res.status(404).json({ message: "Sale not found" });
-            res.json(updatedSale);
+            }
+            return res.json(updatedSale);
         } catch (err) {
             next(err);
         }
@@ -99,9 +102,10 @@ export class SalesControllers {
         try {
             this._validate(req);
             const updatedSale = await this.salesService.applyDiscount(req.params.sale_id, req.body.discount_percentage);
-            if (!updatedSale)
+            if (!updatedSale) {
                 return res.status(404).json({ message: "Sale not found" });
-            res.json(updatedSale);
+            }
+            return res.json(updatedSale);
         } catch (err) {
             next(err);
         }
@@ -137,11 +141,14 @@ export class SalesControllers {
         try {
             this._validate(req);
             const deleted = await this.salesService.deleteSale(req.params.sale_id);
-            if (!deleted)
+            if (!deleted) {
                 return res.status(404).json({ message: "Sale not found" });
-            res.status(204).send();
+            }
+            return res.status(204).send();
         } catch (err) {
             next(err);
         }
     }
+
+
 }

@@ -12,7 +12,6 @@ import { productIdParam, createInventory, updateInventory } from '../validators/
 const repo = new InventoryRepository();
 const service = new InventoryServices(repo);
 const controller = new InventoryControllers(service);
-
 export const InventoryRoutes = Router();
 // Routes for inventory management (list, low stock, with details, CRUD)
 InventoryRoutes.get('/', controller.list);

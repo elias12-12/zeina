@@ -6,6 +6,11 @@ import {app} from './app.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const port = process.env.PORT || 4000;
+// Backend API and Frontend run on port 4000 (single server)
+const PORT = process.env.PORT || 4000;
 
-app.listen(port, () => console.log(`API http://localhost:${port}`));
+app.listen(PORT, () => {
+  console.log(`Roastery Management System running on http://localhost:${PORT}`);
+  console.log(`API: http://localhost:${PORT}/api/`);
+  console.log(`Frontend: http://localhost:${PORT}/`);
+});

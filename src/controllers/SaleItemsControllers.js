@@ -54,7 +54,7 @@ export class SaleItemsControllers {
     list = async (req, res, next) => {
         try {
             const items = await this.saleItemsService.getAllSaleItems();
-            res.json(items);
+            return res.json(items);
         } catch (err) {
             next(err);
         }
@@ -68,9 +68,10 @@ export class SaleItemsControllers {
         try {
             this._validate(req);
             const item = await this.saleItemsService.getSaleItemById(req.params.sale_item_id);
-            if (!item)
-                return res.status(404).json({ message: "Sale item not found" });
-            res.json(item);
+            if (!item) {
+                return res.status(404).json({message: 'No item found'});
+            }
+            return res.json(item);
         } catch (err) {
             next(err);
         }
@@ -85,9 +86,10 @@ export class SaleItemsControllers {
         try {
             this._validate(req);
             const items = await this.saleItemsService.getSaleItemsBySaleId(req.params.sale_id);
-            if (!items || items.length === 0)
+            if (!items || items.length === 0) {
                 return res.status(404).json({ message: "No items found for this sale" });
-            res.json(items);
+            }
+            return res.json(items);
         } catch (err) {
             next(err);
         }
@@ -107,7 +109,7 @@ export class SaleItemsControllers {
                 req.body.quantity,
                 req.body.price_at_sale
             );
-            res.status(201).json(item);
+            return res.status(201).json(item);
         } catch (err) {
             next(err);
         }
@@ -121,9 +123,10 @@ export class SaleItemsControllers {
         try {
             this._validate(req);
             const item = await this.saleItemsService.updateSaleItem(req.params.sale_item_id, req.body);
-            if (!item)
+            if (!item) {
                 return res.status(404).json({ message: "Sale item not found" });
-            res.json(item);
+            }
+            return res.json(item);
         } catch (err) {
             next(err);
         }
@@ -137,9 +140,10 @@ export class SaleItemsControllers {
         try {
             this._validate(req);
             const deleted = await this.saleItemsService.deleteSaleItem(req.params.sale_item_id);
-            if (!deleted)
+            if (!deleted) {
                 return res.status(404).json({ message: "Sale item not found" });
-            res.status(204).send();
+            }
+            return res.status(204).send();
         } catch (err) {
             next(err);
         }
@@ -154,11 +158,13 @@ export class SaleItemsControllers {
         try {
             this._validate(req);
             const item = await this.saleItemsService.getSaleItemByIdWithDetails(req.params.sale_item_id);
-            if (!item)
+            if (!item) {
                 return res.status(404).json({ message: "Sale item not found" });
-            res.json(item);
+            }
+            return res.json(item);
         } catch (err) {
             next(err);
         }
     }
+
 }
